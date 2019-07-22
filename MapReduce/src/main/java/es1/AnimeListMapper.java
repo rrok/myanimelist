@@ -17,8 +17,8 @@ public class AnimeListMapper extends Mapper<LongWritable, Text, IntWritable, Tex
         int id= -1;
         try {
             id= Integer.parseInt(formattedLine[1]);
-            //l'id è anime_id
-            //il valore corrispondente è la provenienza e il nome di chi l'ha letto
+            //id is anime_id
+            //the corresponding value is the source and the name of the person who read it
             context.write(new IntWritable(id), new Text(source+","+formattedLine[0]));
         }
         catch (Exception e){

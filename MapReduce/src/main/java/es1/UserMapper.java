@@ -11,7 +11,7 @@ public class UserMapper extends Mapper<LongWritable, Text,Text,Text> {
     protected void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
 
         String line  = value.toString();
-        // remove all the string between " ".
+        //remove all the string between " ".
         String[] formattedLine = Utils.clearESplit(line);
         try{
             int birthYear = Integer.parseInt(formattedLine[10].substring(0,4));

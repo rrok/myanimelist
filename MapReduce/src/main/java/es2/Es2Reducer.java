@@ -17,7 +17,6 @@ public class Es2Reducer extends Reducer<Text, Text, Text, Text> {
             String[] parts = episodesDuration.toString().split(",");
             avgDuration += Integer.parseInt(parts[0]);
             avgEpisodes += Integer.parseInt(parts[1]);
-
             count++;
         }
 

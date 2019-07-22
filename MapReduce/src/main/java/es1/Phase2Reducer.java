@@ -20,7 +20,7 @@ public class Phase2Reducer extends Reducer<Text, Text, Text, Text> {
             else
                 zone= value.toString().substring(2);
         }
-        //se capita che un username non esiste(è stato pulito da chi ha creato il csv) non considero l'anime list record
+        // if it happens that a username does not exist (it has been cleaned by who created the csv) we don't consider the anime list record
         if(zone!=null)
             for (String titleSource: midle) {
                 String[] titleSourceSplitted= titleSource.split(",");

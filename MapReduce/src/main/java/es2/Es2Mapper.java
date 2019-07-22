@@ -14,7 +14,7 @@ public class Es2Mapper extends Mapper<LongWritable, Text, Text, Text> {
 
         String[] formattedLine = Utils.clearESplit(line);
         try {
-            //Numero medio di episodi e durata media delle puntate degli anime raggruppati per tipologia
+            // Average number of episodes and average duration of anime grouped grouped by type
             String episodes = formattedLine[8];
             int duration = convertDuration(formattedLine[13]);
             String source = formattedLine[7];
@@ -26,9 +26,14 @@ public class Es2Mapper extends Mapper<LongWritable, Text, Text, Text> {
         }
     }
 
-    private int convertDuration(String s) {
+    /**
+     * Data Duration for this case study
+     * @param duration anime duration in hr,min or sec
+     * @return converted value in minutes
+     */
+    private int convertDuration(String duration) {
 
-        String[] parts = s.replaceAll(" per ep.","").split(" ");
+        String[] parts = duration.replaceAll(" per ep.","").split(" ");
         if (parts.length > 1) {
             int result = 0;
 

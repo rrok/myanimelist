@@ -10,7 +10,7 @@ class MainSpark2 {
     val spark = SparkSession.builder().appName("Es1 Spark").getOrCreate()
     import spark.sqlContext.implicits._
 
-    //Numero medio di episodi e durata media delle puntate degli anime raggruppati per tipologia
+    // Average number of episodes and average duration of anime bets grouped by type
     val anime = spark.sparkContext.textFile("/user/rgjinaj/anime_cleaned.csv")
       .map(line=> clearESplit(line))
       .filter(line=>line(7)!="source")
@@ -20,8 +20,14 @@ class MainSpark2 {
       .orderBy("duration")
   }
 
-   def convertDuration(s: String) = {
-    val parts = s.replaceAll(" per ep.", "").split(" ")
+  /**
+    * Data Duration for this case study
+    *
+    * @param duration anime duration in hr,min or sec
+    * @return converted value in minutes
+    */
+   def convertDuration(duration: String) = {
+    val parts = duration.replaceAll(" per ep.", "").split(" ")
     if (parts.length > 1) {
       var result = 0
       var i = 0
@@ -39,15 +45,21 @@ class MainSpark2 {
   }
 
 
-  def clearESplit(s: String): Array[String] = {
-    val sb = new StringBuilder(s)
+  /**
+    * since the comma creates problema for the csv reading, \u00B8 charachter ("chedilla") is used instead of it. Next it will be possible to add again comma
+    * just replacing it
+    * @param uncleanedString
+    * @return Cleaned Array[String]
+    */
+  def clearESplit(uncleanedString: String): Array[String] = {
+    val sb = new StringBuilder(uncleanedString)
     var quote = false
     var i = 0
     while ( {
-      i < s.length
+      i < uncleanedString.length
     }) {
-      if (s.charAt(i) == '\"') quote = !quote
-      else if (s.charAt(i) == ',' && quote) sb.setCharAt(i, '\u00B8') //bug virogla nei titoli, al posto della virgola si mette la chedil
+      if (uncleanedString.charAt(i) == '\"') quote = !quote
+      else if (uncleanedString.charAt(i) == ',' && quote) sb.setCharAt(i, '\u00B8') //fixed comma bug in the titles, instead of the comma the chedilla is inserted
 
       {
         i += 1; i - 1

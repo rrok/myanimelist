@@ -20,7 +20,8 @@ class MainSpark1 {
     val spark = SparkSession.builder().appName("Es1 Spark").getOrCreate()
     import spark.sqlContext.implicits._
     import org.apache.spark.sql.expressions.Window
-    //letto a mano per via di righe con campi contenenti LF, non supportati dal lettore di csv di Spark
+
+    //the csv reader module is not used so read errors are avoided when in the descriptions there are comma type characters that break the reading of the csv file.
     val csv = spark.sparkContext.textFile("/user/rgjinaj/animelists_cleaned.csv")
       .map(line => line.split(","))
       .filter(_.length > 1).map(_.take(2))
@@ -30,10 +31,8 @@ class MainSpark1 {
     val schema = new StructType().add("username", StringType, false).add("anime_id",StringType, false)
     val animelists = spark.createDataFrame(rows, schema)
 
-    /*
-    * il primo tentativo di lettura è stato implementato con l'uso delle lebrerie csv di spark che però non hanno letto bene il file
-    */
-    //val animelists = spark.read.option("header","true").csv("/user/rgjinaj/animelists_cleaned.csv").select("username","anime_id")
+
+    //differently from the first case, in the smaller csv files, ywe used the spark module csv reader  because it does not create reading problems
 
     val anime = spark.read.option("header",true).csv("/user/rgjinaj/anime_cleaned.csv").select("anime_id","title","source")
     val users = spark.read.option("header",true).csv("/user/rgjinaj/users_cleaned.csv").select("username","birth_date").map{row=> (row.getString(0),zone(row.getString(1)))}.toDF("username","zone")

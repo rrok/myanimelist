@@ -20,15 +20,13 @@ public class Main {
 
     public static void main(String[] args) throws Exception {
 
-        //hadoop jar MapReduce.jar es1.Main anime_cleaned.csv animelists_cleaned.csv users_cleaned.csv ./out
-
+        //job List
         List<Job> jobs = new ArrayList<Job>();
         jobs.add(Job.getInstance(new Configuration(),"join anime with animeList"));
         jobs.add(Job.getInstance(new Configuration(),"join result with user"));
         jobs.add(Job.getInstance(new Configuration(),"Group by Zone Source"));
 
-
-        //il job deve per partire questa classe
+        //All job will start by Main class
         jobs.get(0).setJarByClass(Main.class);
         jobs.get(1).setJarByClass(Main.class);
         jobs.get(2).setJarByClass(Main.class);
@@ -45,7 +43,7 @@ public class Main {
         jobs.get(0).setOutputValueClass(Text.class);
         jobs.get(0).waitForCompletion(true);
 
-        //new Path(args[3]) cioè l'output del primo diventa l'imput del secondo job
+        //new Path(args[3]) is the output of the first job and the input of second one
         MultipleInputs.addInputPath(jobs.get(1), new Path(args[3]+"/middle1/*"), KeyValueTextInputFormat.class,MangaUsersMapper.class);
         MultipleInputs.addInputPath(jobs.get(1), new Path(args[2]), TextInputFormat.class,UserMapper.class);
 
@@ -59,17 +57,13 @@ public class Main {
         jobs.get(2).setMapperClass(Phase3Mapper.class);
         jobs.get(2).setReducerClass(Phase3Reducer.class);
         jobs.get(2).setInputFormatClass(KeyValueTextInputFormat.class);
+
         FileInputFormat.addInputPath(jobs.get(2),new Path(args[3]+"/middle2/*"));
         FileOutputFormat.setOutputPath(jobs.get(2),new Path(args[3]+"/Final"));
-
 
         jobs.get(2).setOutputKeyClass(Text.class);
         jobs.get(2).setOutputValueClass(Text.class);
         jobs.get(2).waitForCompletion(true);
-
-
-
-
 
     }
 }

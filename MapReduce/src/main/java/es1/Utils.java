@@ -15,6 +15,11 @@ public class Utils {
         return sb.toString().split(",");
     }
 
+    /**
+     * Given an unsorted Map, returns a new one sorted by value
+     * @param unsortMap
+     * @return SortedMap
+     */
     public static Map<String, Integer> sortByValue(Map<String, Integer> unsortMap) {
 
         // 1. Convert Map to List of Map
@@ -22,7 +27,7 @@ public class Utils {
                 new LinkedList<Map.Entry<String, Integer>>(unsortMap.entrySet());
 
         // 2. Sort list with Collections.sort(), provide a custom Comparator
-        //    Try switch the o1 o2 position for a different order
+        //Try switch the o1 o2 position for a different order
         Collections.sort(list, new Comparator<Map.Entry<String, Integer>>() {
             public int compare(Map.Entry<String, Integer> o1,
                                Map.Entry<String, Integer> o2) {
@@ -35,15 +40,6 @@ public class Utils {
         for (Map.Entry<String, Integer> entry : list) {
             sortedMap.put(entry.getKey(), entry.getValue());
         }
-
-        /*
-        //classic iterator example
-        for (Iterator<Map.Entry<String, Integer>> it = list.iterator(); it.hasNext(); ) {
-            Map.Entry<String, Integer> entry = it.next();
-            sortedMap.put(entry.getKey(), entry.getValue());
-        }*/
-
-
         return sortedMap;
     }
 }

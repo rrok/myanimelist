@@ -11,7 +11,7 @@ import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 public class Main2 {
     public static void main(String[] args) throws Exception {
 
-        //hadoop jar MapReduce.jar es2.Main2 anime_cleaned.csv ./out2
+
         Job job = new Job(new Configuration(), "Mean number of episodes and duration");
         job.setJarByClass(Main2.class);
 

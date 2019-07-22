@@ -18,8 +18,8 @@ public class AnimeMapper extends Mapper<LongWritable,Text, IntWritable, Text> {
         String[] formattedLine = Utils.clearESplit(line);
         try {
             id= Integer.parseInt(formattedLine[0]);
-            //scrivo come chiave l'id dell'anime
-            //come valore scrivo la provenienza (cioè questo csv) e successivamente title e tipologia(source) separati da una virgola
+            //anime_id is used as key
+            //id is the key and the vaule is composet starting with source followed by title and type(source) separated by a comma
             context.write(new IntWritable(id), new Text(source+","+formattedLine[1]+","+formattedLine[7]));
         }
         catch (Exception e){

@@ -12,31 +12,29 @@ public class Phase1ReducerOptimized extends Reducer<IntWritable, Text, Text, Tex
 
     @Override
     protected void reduce(IntWritable key, Iterable<Text> values, Context context) throws IOException, InterruptedException {
-        //la kay è l'id di tutti i record impostati nei mapper
-
-        //in anime ci metterò titolo e source
+        //key is the record record provided by mapper
+        //anime String will contain title and manga source
         String anime = null ;
 
-        //in questa lista fornita dall'altro mapper inserisco i nomi dei tizi che hanno letto questo anime
+        //animeListRecords will contain all username that read this anime
         List<String> animeListRecords = new ArrayList<String>();
 
-
-        //scorro e capisco dalla source la provenienza e salvo i dati.
+        //check all values to know from whitch mapper are from
         for (Text value:values) {
             //
             if(value.toString().charAt(0)== AnimeListMapper.source){
-                //tolgo la sorgente perché non mi serve più
+                //clear data removing first source char and comma
                 animeListRecords.add(value.toString().substring(2));
             }
             else {
                 anime= value.toString().substring(2);
             }
         }
-        //se capita che un username non esiste(è stato pulito da chi ha creato il csv) non considero l'anime list record
+        // if it happens that a username does not exist (it has been cleaned by who created the csv) we don't consider the anime list record
         if(anime!=null){
             StringBuilder users = new StringBuilder();
             for (String user: animeListRecords) {
-                //scrivo
+                //appends takes considerably less time than users + = "," + user;
                 users.append(',').append(user);
             }
             context.write(new Text(anime),new Text(users.substring(1)));
