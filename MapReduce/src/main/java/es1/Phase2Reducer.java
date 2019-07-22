@@ -14,7 +14,7 @@ public class Phase2Reducer extends Reducer<Text, Text, Text, Text> {
         List<String> midle = new ArrayList<String>();
         for (Text value:values) {
             //
-            if(value.toString().charAt(0)== UserMangaTypeMapper.source){
+            if(value.toString().charAt(0)== MangaUsersMapper.source){
                 midle.add(value.toString().substring(2));
             }
             else

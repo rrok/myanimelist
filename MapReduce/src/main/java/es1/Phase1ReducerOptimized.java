@@ -8,9 +8,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Phase1ReducerOptimized extends Reducer<IntWritable, Text,Text,Text>{
-    protected void reduce(IntWritable key, Iterable<Text> values, Reducer.Context context) throws IOException, InterruptedException {
+public class Phase1ReducerOptimized extends Reducer<IntWritable, Text, Text, Text> {
 
+    @Override
+    protected void reduce(IntWritable key, Iterable<Text> values, Context context) throws IOException, InterruptedException {
         //la kay è l'id di tutti i record impostati nei mapper
 
         //in anime ci metterò titolo e source
@@ -33,10 +34,10 @@ public class Phase1ReducerOptimized extends Reducer<IntWritable, Text,Text,Text>
         }
         //se capita che un username non esiste(è stato pulito da chi ha creato il csv) non considero l'anime list record
         if(anime!=null){
-            String users = "";
+            StringBuilder users = new StringBuilder();
             for (String user: animeListRecords) {
                 //scrivo
-                users+= ","+user ;
+                users.append(',').append(user);
             }
             context.write(new Text(anime),new Text(users.substring(1)));
         }

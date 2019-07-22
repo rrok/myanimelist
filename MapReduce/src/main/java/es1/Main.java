@@ -36,9 +36,6 @@ public class Main {
         MultipleInputs.addInputPath(jobs.get(0), new Path(args[0]), TextInputFormat.class,AnimeMapper.class);
         MultipleInputs.addInputPath(jobs.get(0), new Path(args[1]), TextInputFormat.class,AnimeListMapper.class);
 
-        //version 1
-        //jobs.get(0).setReducerClass(Phase1Reducer.class);
-
         //version 2 optimized
         jobs.get(0).setReducerClass(Phase1ReducerOptimized.class);
 
@@ -49,7 +46,7 @@ public class Main {
         jobs.get(0).waitForCompletion(true);
 
         //new Path(args[3]) cioè l'output del primo diventa l'imput del secondo job
-        MultipleInputs.addInputPath(jobs.get(1), new Path(args[3]+"/middle1/*"), KeyValueTextInputFormat.class,UserMangaTypeMapper.class);
+        MultipleInputs.addInputPath(jobs.get(1), new Path(args[3]+"/middle1/*"), KeyValueTextInputFormat.class,MangaUsersMapper.class);
         MultipleInputs.addInputPath(jobs.get(1), new Path(args[2]), TextInputFormat.class,UserMapper.class);
 
         jobs.get(1).setReducerClass(Phase2Reducer.class);
